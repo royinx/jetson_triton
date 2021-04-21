@@ -1,0 +1,77 @@
+name: "face_lffd"
+platform: "tensorrt_plan"
+max_batch_size: 64
+
+dynamic_batching {
+  preferred_batch_size: [ 8, 16, 32, 64 ]
+  max_queue_delay_microseconds: 100
+}
+
+input [
+  {
+    name: "data"
+    data_type: TYPE_FP32
+    format: FORMAT_NCHW
+    dims: [ 3, 480, 640 ]
+  }
+]
+output [
+  {
+    name: "slice_axis20"
+    data_type: TYPE_FP32
+    dims: [ 1, 119, 159 ]
+  },
+  {
+    name: "conv8_3_bbox"
+    data_type: TYPE_FP32
+    dims: [ 4, 119, 159 ]
+  },
+  {
+    name: "slice_axis21"
+    data_type: TYPE_FP32
+    dims: [ 1, 59, 79 ]
+  },
+  {
+    name: "conv11_3_bbox"
+    data_type: TYPE_FP32
+    dims: [ 4, 59, 79 ]
+  },
+  {
+    name: "slice_axis22"
+    data_type: TYPE_FP32
+    dims: [ 1, 29, 39 ]
+  },
+  {
+    name: "conv14_3_bbox"
+    data_type: TYPE_FP32
+    dims: [ 4, 29, 39 ]
+  },
+  {
+    name: "slice_axis23"
+    data_type: TYPE_FP32
+    dims: [ 1, 14, 19 ]
+  },
+  {
+    name: "conv17_3_bbox"
+    data_type: TYPE_FP32
+    dims: [ 4, 14, 19 ]
+  },
+  {
+    name: "slice_axis24"
+    data_type: TYPE_FP32
+    dims: [ 1, 6, 9 ]
+  },
+  {
+    name: "conv20_3_bbox"
+    data_type: TYPE_FP32
+    dims: [ 4, 6, 9 ]
+  }
+]
+
+
+instance_group [
+  {
+    count:1
+    kind: KIND_GPU
+  }
+]

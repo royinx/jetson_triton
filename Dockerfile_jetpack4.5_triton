@@ -1,0 +1,27 @@
+FROM nvcr.io/nvidia/l4t-base:r32.5.0
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        software-properties-common \
+        autoconf \
+        automake \
+        build-essential \
+        cmake \
+        git \
+        libb64-dev \
+        libre2-dev \
+        libssl-dev \
+        libtool \
+        libboost-dev \
+        libcurl4-openssl-dev \
+        rapidjson-dev \
+        patchelf \
+        zlib1g-dev
+
+WORKDIR /workdir/
+RUN wget https://github.com/triton-inference-server/server/releases/download/v2.8.0/tritonserver2.8.0-jetpack4.5.tgz && \
+    tar -zxvf tritonserver2.8.0-jetpack4.5.tgz 
+ENV PATH="/workdir/bin:${PATH}"
+COPY models /models/
+
+ENTRYPOINT [ "tritonserver", "--model-repository=/models/" ]
